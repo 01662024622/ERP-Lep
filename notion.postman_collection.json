@@ -1,0 +1,172 @@
+{
+	"info": {
+		"_postman_id": "85fb3ce0-8e55-4317-bdca-4bbdf16ac2ca",
+		"name": "notion",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get database",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer secret_FSTMa6dNiG3fGlSpqD82j22yqwAhVWFRk0UqfyaUJCX"
+					},
+					{
+						"key": "Notion-Version",
+						"type": "text",
+						"value": "2021-08-16"
+					}
+				],
+				"url": {
+					"raw": "https://api.notion.com/v1/databases",
+					"protocol": "https",
+					"host": [
+						"api",
+						"notion",
+						"com"
+					],
+					"path": [
+						"v1",
+						"databases"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get list page of database",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer secret_FSTMa6dNiG3fGlSpqD82j22yqwAhVWFRk0UqfyaUJCX"
+					},
+					{
+						"key": "Notion-Version",
+						"type": "text",
+						"value": "2021-08-16"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t  \"filter\": {},\r\n\t  \"sorts\": [\r\n\t    {\r\n\t      \"property\": \"Name\",\r\n\t      \"direction\": \"ascending\"\r\n\t    }\r\n\t  ]\r\n\t}"
+				},
+				"url": {
+					"raw": "https://api.notion.com/v1/databases/06cf32f5-a860-4100-854d-82684c48cffd/query",
+					"protocol": "https",
+					"host": [
+						"api",
+						"notion",
+						"com"
+					],
+					"path": [
+						"v1",
+						"databases",
+						"06cf32f5-a860-4100-854d-82684c48cffd",
+						"query"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create page of database",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer secret_FSTMa6dNiG3fGlSpqD82j22yqwAhVWFRk0UqfyaUJCX"
+					},
+					{
+						"key": "Notion-Version",
+						"type": "text",
+						"value": "2021-08-16"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"parent\": { \"database_id\": \"06cf32f5a8604100854d82684c48cffd\" },\r\n\t\"properties\": {\r\n\t\t\"Người tạo\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"Nguyễn ngọc Phương\"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Tiến độ\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"33%\"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Mô tả\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"Cần 01 bàn.... trước ngày 20/01/2021\"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Dự án\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"HÀNH CHÍNH\"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Link\": {\r\n                    \"url\": \"https://www.epochconverter.com/\"\r\n                },\r\n                \"Ngày kết thúc\": {\r\n                    \"date\": {\r\n                        \"start\": \"2021-10-15T00:00:00.000+07:00\"\r\n                    }\r\n                },\r\n                \"Trạng thái\": {\r\n                    \"select\": {\r\n                        \"name\": \"Đang thực hiện\"\r\n                    }\r\n                },\r\n                \"Quá hạn\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"Bước 2: \"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Ngày bắt đầu\": {\r\n                    \"date\": {\r\n                        \"start\": \"2021-10-12T14:00:00.000+07:00\"\r\n                    }\r\n                },\r\n                \"Người thực hiện\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"Nguyễn ngọc Phương,Nguyễn Thị Vân Anh\"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Công việc\": {\r\n                    \"title\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"Đặt bàn làm việc cho nhân viên mới\"\r\n                            }\r\n                        }\r\n                    ]\r\n                }\r\n\t},\r\n\t\"children\": [\r\n\t\t{\r\n\t\t\t\"object\": \"block\",\r\n\t\t\t\"type\": \"heading_2\",\r\n\t\t\t\"heading_2\": {\r\n\t\t\t\t\"text\": [{ \"type\": \"text\", \"text\": { \"content\": \"Lacinato kale\" } }]\r\n\t\t\t}\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"object\": \"block\",\r\n\t\t\t\"type\": \"paragraph\",\r\n\t\t\t\"paragraph\": {\r\n\t\t\t\t\"text\": [\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"type\": \"text\",\r\n\t\t\t\t\t\t\"text\": {\r\n\t\t\t\t\t\t\t\"content\": \"Lacinato kale is a variety of kale with a long tradition in Italian cuisine, especially that of Tuscany. It is also known as Tuscan kale, Italian kale, dinosaur kale, kale, flat back kale, palm tree kale, or black Tuscan palm.\",\r\n\t\t\t\t\t\t\t\"link\": { \"url\": \"https://en.wikipedia.org/wiki/Lacinato_kale\" }\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t]\r\n\t\t\t}\r\n\t\t}\r\n\t]\r\n}"
+				},
+				"url": {
+					"raw": "https://api.notion.com/v1/pages",
+					"protocol": "https",
+					"host": [
+						"api",
+						"notion",
+						"com"
+					],
+					"path": [
+						"v1",
+						"pages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update page of database",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer secret_FSTMa6dNiG3fGlSpqD82j22yqwAhVWFRk0UqfyaUJCX"
+					},
+					{
+						"key": "Notion-Version",
+						"type": "text",
+						"value": "2021-08-16"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \t\"properties\": {\r\n\t\t\"Người tạo\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"Nguyễn ngọc Phương\"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Tiến độ\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"63%\"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Mô tả\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"Cần 01 bàn.... trước ngày 20/01/2021\"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Dự án\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"HÀNH CHÍNH\"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Link\": {\r\n                    \"url\": \"https://www.epochconverter.com/\"\r\n                },\r\n                \"Ngày kết thúc\": {\r\n                    \"date\": {\r\n                        \"start\": \"2021-10-15T00:00:00.000+07:00\"\r\n                    }\r\n                },\r\n                \"Trạng thái\": {\r\n                    \"select\": {\r\n                        \"name\": \"Đang thực hiện\"\r\n                    }\r\n                },\r\n                \"Quá hạn\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"Bước 2: \"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Ngày bắt đầu\": {\r\n                    \"date\": {\r\n                        \"start\": \"2021-10-12T14:00:00.000+07:00\"\r\n                    }\r\n                },\r\n                \"Người thực hiện\": {\r\n                    \"rich_text\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"Nguyễn ngọc Phương,Nguyễn Thị Vân Anh\"\r\n                            }\r\n                        }\r\n                    ]\r\n                },\r\n                \"Công việc\": {\r\n                    \"title\": [\r\n                        {\r\n                            \"text\": {\r\n                                \"content\": \"Đặt bàn làm việc cho nhân viên mới\"\r\n                            }\r\n                        }\r\n                    ]\r\n                }\r\n\t}\r\n}"
+				},
+				"url": {
+					"raw": "https://api.notion.com/v1/pages/20d7cd99-a2e9-472b-b906-c9de348fc934",
+					"protocol": "https",
+					"host": [
+						"api",
+						"notion",
+						"com"
+					],
+					"path": [
+						"v1",
+						"pages",
+						"20d7cd99-a2e9-472b-b906-c9de348fc934"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
