@@ -1,5 +1,6 @@
 package com.fastwok.crawler.util;
 
+import com.fastwok.crawler.entities.Item;
 import com.fastwok.crawler.entities.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -34,5 +35,21 @@ public class ProductUtil {
         product.setName(productObject.getString("name"));
         product.setParentId(parentId);
         return product;
+    }
+    public static List<Item> convertItem(JSONArray jsonArray, long orderId) {
+        List<Item> items = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject itemObject = jsonArray.getJSONObject(i);
+            Item item = new Item();
+            item.setOrderId(orderId);
+            item.setPrice(itemObject.getLong("price"));
+            item.setQuantity(itemObject.getLong("total_quantity"));
+            item.setPId(itemObject.getLong("id"));
+            item.setCode(itemObject.getString("sku"));
+            item.setName(itemObject.getString("name"));
+            item.setOrderId(orderId);
+            items.add(item);
+        }
+        return items;
     }
 }
