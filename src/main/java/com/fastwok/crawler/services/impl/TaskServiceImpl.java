@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 //@Service
+@Service
 @Slf4j
 public class TaskServiceImpl implements TaskService {
     @Autowired
@@ -80,56 +81,11 @@ public class TaskServiceImpl implements TaskService {
         List<Product> products = ProductUtil.convert(jsonObject.getJSONArray("data"),0);
         productRepository.saveAll(products);
         if (count<page*500) {log.info("done----------------------");return;}
-        Thread.sleep(10000);
         crawlProduct("",page+1);
-//        if (customers.isEmpty()) return;
-//        customers.forEach(customer -> {
-//            List<Customer> checkKiotId = customerRepository.findCustomerByKiotId(customer.getKiot_Id());
-//            if (checkKiotId.size() > 0) return;
-//            Customer checkCode = customerRepository.findCustomerByCode(customer.getCode());
-//            if (checkCode != null) {
-//                if (checkCode.getPersonTel().equals(customer.getPersonTel())) {
-//                    checkCode.setKiot_Id(customer.getKiot_Id());
-//                    customer = checkCode;
-//                }
-//                if (checkCode.getTel().equals(customer.getTel())) {
-//                    checkCode.setKiot_Id(customer.getKiot_Id());
-//                    customer = checkCode;
-//                }
-//            }
-//            customerRepository.save(customer);
-//        });
+
     }
 
-    //
-//    public void crawlAccDoc(String today1, String today) throws UnirestException {
-//        String param = "?format=json&fromPurchaseDate=" + today1 + "T00:00:00&toPurchaseDate=" + today + "&orderBy=id&orderDirection=desc&pageSize=100";
-//        HttpResponse<JsonNode> authen = Api(URL_API + ACCDOC + param);
-//        JSONObject res = new JSONObject(authen.getBody());
-//        JSONObject jsonObject = res.getJSONObject("object");
-//        if (!jsonObject.has("data")) return;
-//        List<AccDoc> accdocs = AccdocUtil.convert(jsonObject.getJSONArray("data"));
-//        if (accdocs.isEmpty()) return;
-//        AtomicInteger i = new AtomicInteger();
-//        accdocs.forEach(accdoc -> {
-//            Optional<AccDoc> checkId = accDocRepository.findById(accdoc.getId());
-//            if (checkId.isPresent()) return;
-//            i.addAndGet(1);
-//            accDocRepository.save(accdoc);
-//            accDocSaleRepository.saveAll(accdoc.getAccDocSales());
-//            accDocRepository.runExec(accdoc.getId());
-//            UpdateStatus updateStatus = accDocRepository.updateStatus(accdoc.getId());
-//            String updateStatusBody = BodyRequest.UpdateAccdoc(updateStatus.getDescription(), updateStatus.getStatus());
-//            try {
-//                Put(URL_API + ACCDOC + "/" + updateStatus.getId(), updateStatusBody);
-//            } catch (UnirestException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//        if (i.get() > 0)
-//            accDocRepository.runInventory();
-//    }
-//
+
     private HttpResponse<JsonNode> OAuth2(String url, String body)
             throws UnirestException {
         Date date = new Date();

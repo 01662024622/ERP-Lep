@@ -25,9 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -62,8 +60,6 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
 
         crawlOrder(1,true);
-//        crawlAccDoc(today1,today);
-//        crawlItem();
     }
 
 
@@ -75,7 +71,6 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
         date.add(Calendar.HOUR, -1);
         String yesterday = dateFormat.format(date.getTime());
-        today = yesterday = "2022/11/1";
 
         String paramOrder = "?limit=50&skip=" + (page * 50 - 50) + "&types=order&sources=web,app&stock_id=31&order_by=desc&sort_by=id&statuses=draft&min_created_at=" + yesterday + "&max_created_at=" + today;
         HttpResponse<JsonNode> orders = Api(URL_API + OrderURL + paramOrder);
@@ -101,8 +96,28 @@ public class TaskOrderServiceImpl implements TaskOrderService {
             resDetail = resDetail.getJSONObject("data");
             Order order = OrderUtil.convert(resDetail);
             List<Item> items = ProductUtil.convertItem(resDetail.getJSONArray("products"), order.getPId());
+            List<String> itemQuery = new ArrayList<>();
+            items.forEach((element)->{
+                Item item = itemRepository.findFirstByPId(element.getPId());
+                if (item!=null) element.setNId(item.getNId());
+                else {
+                    String body = BodyRequest.getBodyGetProduct("{\"page\":1,\"name\":\""+element.getCode()+"\"}");
+                    try {
+                        Long idN = getItemIdN("https://open.nhanh.vn/api/product/search",body,element.getCode());
+                        element.setNId(idN);
+                    } catch (UnirestException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                itemQuery.add(element.toString());
+            });
             orderRepository.save(order);
             itemRepository.saveAll(items);
+            String bodyProducts = String.join(",",itemQuery);
+            String body =  BodyRequest.getBodyGetProduct(order +bodyProducts+"  ]\n" +
+                    "}");
+            JSONObject jsonObject1 = ApiN("https://open.nhanh.vn/api/order/add",body);
+            log.info(jsonObject1.toString());
         }
         if (count < page * 50) {
             log.info("done----------------------");
@@ -141,7 +156,54 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         tokenRepository.save(token);
         return token;
     }
+    private JSONObject ApiN(String url,String body)
+            throws UnirestException {
+        Date date = new Date();
+        long timeMilli = date.getTime();
+        HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.post(url)
+                .header("Accept", "*/*")
+                .header("x-fw", String.valueOf(timeMilli))
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36")
+                .header("Accept-Language", "en-US,en;q=0.9,vi;q=0.8")
+                .header("Connection", "keep-alive")
+                .header("Accept-Encoding", "gzip, deflate, br")
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .header("Sec-Fetch-Dest", "empty")
+                .header("Sec-Fetch-Mode", "cors")
+                .header("Sec-Fetch-Site", "same-site")
+                .body(body)
+                .asJson();
+        JSONObject res = new JSONObject(jsonNodeHttpResponse.getBody());
+        return res.getJSONObject("object");
+    }
+    private Long getItemIdN(String url,String body,String code)
+            throws UnirestException {
+        JSONObject jsonObject =ApiN(url,body);
+        if (!jsonObject.has("data")) return 37864656L;
+        jsonObject = jsonObject.getJSONObject("data");
+        if (!jsonObject.has("products")) return 37864656L;
+        jsonObject = jsonObject.getJSONObject("products");
+        Iterator<String> keys = jsonObject.keys();
 
+        while(keys.hasNext()) {
+            String key = keys.next();
+            if (jsonObject.getJSONObject(key) != null) {
+                JSONObject itemObject = jsonObject.getJSONObject(key);
+                if(itemObject.getString("code").equalsIgnoreCase(code))
+                    return itemObject.getLong("idNhanh");
+            }
+        }
+        keys = jsonObject.keys();
+        while(keys.hasNext()) {
+            String key = keys.next();
+            if (jsonObject.getJSONObject(key) != null) {
+                JSONObject itemObject = jsonObject.getJSONObject(key);
+                if(itemObject.getString("code").replace("-","").equalsIgnoreCase(code.replace("-","")))
+                    return itemObject.getLong("idNhanh");
+            }
+        }
+        return 37864656L;
+    }
     public static HttpResponse<JsonNode> Api(String url)
             throws UnirestException {
         Date date = new Date();

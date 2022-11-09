@@ -17,4 +17,15 @@ public class Item {
     private Long quantity; /// ERP ID
     private Long price; /// ERP ID
     private Long OrderId; /// ERP ID
+    @Override
+    public String toString() {
+        return "{\n" +
+                "      \"id\": "+pId+",\n" +
+                "      \"idNhanh\": "+nId+",\n" +
+                "      \"quantity\": "+quantity+",\n" +
+                "      \"name\":\""+name+"\",\n" +
+                "      \"price\":"+price+"\n" +
+                "    }\n";
+    }
+
 }

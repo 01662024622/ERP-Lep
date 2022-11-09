@@ -18,4 +18,17 @@ public class Order {
     private String city;
     private String district;
     private String ward;
+    @Override
+    public String toString(){
+        return "{\n" +
+                "  \"id\": "+pId+",\n" +
+                "  \"depotId\":132462,\n" +
+                "  \"customerName\": \""+name+"\",\n" +
+                "  \"customerMobile\": \""+phone+"\",\n" +
+                "  \"customerAddress\": \""+address+"\",\n" +
+                "  \"customerCityName\": \""+city+"\",\n" +
+                "  \"customerDistrictName\": \""+district+"\",\n" +
+                "  \"privateDescription\":\"Đơn lên từ website\",\n" +
+                "  \"productList\": [\n" ;
+    }
 }
