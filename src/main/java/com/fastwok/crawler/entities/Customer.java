@@ -6,21 +6,14 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name="B20Customer")
+@Table(name="ERPCustomer")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
     @Column(length = 1000)
-    private String ParentId="220241";
-    private Integer CustomerType=1;
-    private String BranchCode="A01";
-    private String KiotViet="kiot tranfer";
-    private String Code;
-    private String Name;
-    private String Address="";
-    private String BillingAddress="";
-    private String PersonTel="";
-    private String Tel="";
-    private String Kiot_Id;
+    private Integer eId;
+    private String name;
+    private String phone;
+    private Integer coin=0;
 }

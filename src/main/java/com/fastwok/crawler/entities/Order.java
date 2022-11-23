@@ -13,7 +13,9 @@ public class Order {
     private Long pId;
     private String name;
     private String code;
+    private Integer customerId;
     private String phone;
+    private String coupon;
     private String address;
     private String city;
     private String district;
@@ -27,6 +29,7 @@ public class Order {
                 "  \"customerMobile\": \""+phone+"\",\n" +
                 "  \"customerAddress\": \""+address+"\",\n" +
                 "  \"customerCityName\": \""+city+"\",\n" +
+                "  \"couponCode\": \""+coupon+"\",\n" +
                 "  \"customerDistrictName\": \""+district+"\",\n" +
                 "  \"privateDescription\":\"Đơn lên từ website\",\n" +
                 "  \"productList\": [\n" ;

@@ -7,9 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
-    @Query("SELECT c FROM Customer c where c.Kiot_Id=?1")
-    List<Customer> findCustomerByKiotId(String kiotId);
-
-    @Query("SELECT c FROM Customer c where c.Code=?1")
-    Customer findCustomerByCode(String code);
+    @Query("SELECT COUNT(o.phone) FROM Customer o where o.phone=?1")
+    long countByPhone(String phone);
 }

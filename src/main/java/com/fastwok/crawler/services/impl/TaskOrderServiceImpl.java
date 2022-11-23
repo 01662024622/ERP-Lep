@@ -1,16 +1,11 @@
 package com.fastwok.crawler.services.impl;
 
-import com.fastwok.crawler.entities.Item;
-import com.fastwok.crawler.entities.Order;
-import com.fastwok.crawler.entities.Product;
-import com.fastwok.crawler.entities.Token;
-import com.fastwok.crawler.repository.ItemRepository;
-import com.fastwok.crawler.repository.OrderRepository;
-import com.fastwok.crawler.repository.ProductRepository;
-import com.fastwok.crawler.repository.TokenRepository;
+import com.fastwok.crawler.entities.*;
+import com.fastwok.crawler.repository.*;
 import com.fastwok.crawler.services.isservice.TaskOrderService;
 import com.fastwok.crawler.services.isservice.TaskService;
 import com.fastwok.crawler.util.BodyRequest;
+import com.fastwok.crawler.util.CustomerUtil;
 import com.fastwok.crawler.util.OrderUtil;
 import com.fastwok.crawler.util.ProductUtil;
 import com.mashape.unirest.http.HttpResponse;
@@ -36,6 +31,8 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     OrderRepository orderRepository;
     @Autowired
     ItemRepository itemRepository;
+    @Autowired
+    CustomerRepository customerRepository;
     static Token TokenCode = null;
     private final String User = "admin";
     private final String Password = "123456a@";
@@ -59,8 +56,9 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         }
 
 
-        crawlOrder(1,true);
+       crawlOrder(1,true);
     }
+
 
 
     public void crawlOrder(int page,boolean checkLogin) throws UnirestException, InterruptedException {
@@ -111,6 +109,14 @@ public class TaskOrderServiceImpl implements TaskOrderService {
                 }
                 itemQuery.add(element.toString());
             });
+            long checkPhone = customerRepository.countByPhone(order.getPhone());
+            if (checkPhone==0) {
+                Customer customer = new Customer();
+                customer.setEId(order.getCustomerId());
+                customer.setPhone(order.getPhone());
+                customer.setName(order.getName());
+                customerRepository.save(customer);
+            }
             orderRepository.save(order);
             itemRepository.saveAll(items);
             String bodyProducts = String.join(",",itemQuery);
