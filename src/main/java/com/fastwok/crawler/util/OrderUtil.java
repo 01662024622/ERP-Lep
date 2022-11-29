@@ -20,8 +20,9 @@ public class OrderUtil {
         if (jsonObject.has("payments")){
             JSONArray payment = jsonObject.getJSONArray("payments");
             if (payment.length()>0){
-                if (payment.getJSONObject(0).has("voucher")){
-                    order.setCoupon(payment.getJSONObject(0).getJSONObject("voucher").getString("code"));
+                if (payment.getJSONObject(0).has("voucher")&&!payment.getJSONObject(0).isNull("voucher")){
+                    if(!payment.getJSONObject(0).getJSONObject("voucher").isNull("code")&& payment.getJSONObject(0).getJSONObject("voucher").has("code"))
+                        order.setCoupon(payment.getJSONObject(0).getJSONObject("voucher").getString("code"));
                 }
             }
         }
