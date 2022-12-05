@@ -16,6 +16,7 @@ public class Order {
     private Integer customerId;
     private String phone;
     private String coupon;
+    private Long coin;
     private String address;
     private String city;
     private String district;
@@ -30,6 +31,7 @@ public class Order {
                 "  \"customerAddress\": \""+address+"\",\n" +
                 "  \"customerCityName\": \""+city+"\",\n" +
                 "  \"couponCode\": \""+coupon+"\",\n" +
+                "  \"coin\": \""+coin+"\",\n" +
                 "  \"customerDistrictName\": \""+district+"\",\n" +
                 "  \"privateDescription\":\"Đơn lên từ website\",\n" +
                 "  \"productList\": [\n" ;
