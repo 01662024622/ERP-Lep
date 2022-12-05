@@ -3,9 +3,7 @@ package com.fastwok.crawler.services.impl;
 import com.fastwok.crawler.entities.*;
 import com.fastwok.crawler.repository.*;
 import com.fastwok.crawler.services.isservice.TaskOrderService;
-import com.fastwok.crawler.services.isservice.TaskService;
 import com.fastwok.crawler.util.BodyRequest;
-import com.fastwok.crawler.util.CustomerUtil;
 import com.fastwok.crawler.util.OrderUtil;
 import com.fastwok.crawler.util.ProductUtil;
 import com.mashape.unirest.http.HttpResponse;
@@ -33,6 +31,8 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     ItemRepository itemRepository;
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    CustomerNhanhRepository customerNhanhRepository;
     static Token TokenCode = null;
     private final String User = "admin";
     private final String Password = "123456a@";
@@ -56,10 +56,65 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         }
 
 
-       crawlOrder(1,true);
+        importCustomer(9,true);
     }
 
 
+    public void importCustomer(int page,boolean checkLogin) throws UnirestException, InterruptedException {
+        List<CustomerNhanh> customerNhanhs = customerNhanhRepository.getCustomer(10,page*10);
+        for (CustomerNhanh cusn : customerNhanhs) {
+            Customer customer =customerRepository.getByPhone(cusn.getPhone());
+            if (customer==null){
+                JSONObject customers = new JSONObject(Api("https://api.lep.vn/v1/users?limit=20&skip=0&keyword="+cusn.getPhone()).getBody()).getJSONObject("object");
+                if (!customers.has("data")&&!checkLogin) {
+                    return;
+                }
+                if (!customers.has("data")&&checkLogin) {
+                    String body = BodyRequest.GetbodyAuth(User, Password);
+                    OAuth2(URL_API + Login, body);
+                    importCustomer(page,false);
+                }else {
+                    if (!customers.has("data")) return;
+                    if (customers.getJSONArray("data").length()>0) {
+                        JSONObject convert = customers.getJSONArray("data").getJSONObject(0);
+                        Customer customer1 = new Customer();
+                        customer1.setEId(convert.getInt("id"));
+                        customer1.setPhone(convert.getString("phone"));
+                        customer1.setName(convert.getString("name"));
+                        customer1.setCoin(cusn.getCoin());
+                        Put("https://api.lep.vn/v1/users/"+customer1.getEId(),BodyRequest.updateUser(customer1));
+                        customerRepository.save(customer1);
+                    }else {
+                        JSONObject resPostCustomer = Post("https://api.lep.vn/v1/users",BodyRequest.updateUser(cusn));
+                        if(!resPostCustomer.has("data")) continue;
+                        Customer customer1 = new Customer();
+                        customer1.setName(cusn.getName());
+                        customer1.setPhone(cusn.getPhone());
+                        customer1.setCoin(cusn.getCoin());
+                        customer1.setEId(resPostCustomer.getJSONObject("data").getInt("id"));
+                        customerRepository.save(customer1);
+                    }
+                }
+            }else {
+                customer.setCoin(cusn.getCoin());
+                Put("https://api.lep.vn/v1/users/"+customer.getEId(),BodyRequest.updateUser(customer));
+                customerRepository.save(customer);
+//                log.info("customer------"+cusn.getId()+"----------------------"+cusn.getPhone());
+            }
+        }
+
+        if (820 < page * 10) {
+            log.info("done----------------------");
+            return;
+        }else {
+            if(page%500==0){
+                Thread.sleep(50000);
+            }
+            log.info("page------"+page+"----------------------");
+        }
+        Thread.sleep(5000);
+        importCustomer(page + 1,true);
+    }
 
     public void crawlOrder(int page,boolean checkLogin) throws UnirestException, InterruptedException {
         Calendar date = Calendar.getInstance();
@@ -228,6 +283,47 @@ public class TaskOrderServiceImpl implements TaskOrderService {
                 .header("Sec-Fetch-Site", "same-site")
                 .asJson();
     }
-
+    private JSONObject Put(String url,String body)
+            throws UnirestException {
+        Date date = new Date();
+        long timeMilli = date.getTime();
+        HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.put(url)
+                .header("Accept", "*/*")
+                .header("Authorization", "Bearer "+TokenCode.getToken().replace("\"",""))
+                .header("x-fw", String.valueOf(timeMilli))
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36")
+                .header("Accept-Language", "en-US,en;q=0.9,vi;q=0.8")
+                .header("Connection", "keep-alive")
+                .header("Accept-Encoding", "gzip, deflate, br")
+                .header("Content-Type", "application/json")
+                .header("Sec-Fetch-Dest", "empty")
+                .header("Sec-Fetch-Mode", "cors")
+                .header("Sec-Fetch-Site", "same-site")
+                .body(body)
+                .asJson();
+        JSONObject res = new JSONObject(jsonNodeHttpResponse.getBody());
+        return res.getJSONObject("object");
+    }
+    private JSONObject Post(String url,String body)
+            throws UnirestException {
+        Date date = new Date();
+        long timeMilli = date.getTime();
+        HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.post(url)
+                .header("Accept", "*/*")
+                .header("Authorization", "Bearer "+TokenCode.getToken().replace("\"",""))
+                .header("x-fw", String.valueOf(timeMilli))
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36")
+                .header("Accept-Language", "en-US,en;q=0.9,vi;q=0.8")
+                .header("Connection", "keep-alive")
+                .header("Accept-Encoding", "gzip, deflate, br")
+                .header("Content-Type", "application/json")
+                .header("Sec-Fetch-Dest", "empty")
+                .header("Sec-Fetch-Mode", "cors")
+                .header("Sec-Fetch-Site", "same-site")
+                .body(body)
+                .asJson();
+        JSONObject res = new JSONObject(jsonNodeHttpResponse.getBody());
+        return res.getJSONObject("object");
+    }
 
 }
