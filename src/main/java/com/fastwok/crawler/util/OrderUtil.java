@@ -12,6 +12,9 @@ public class OrderUtil {
         Order order = new Order();
         order.setCode(jsonObject.getString("code"));
         order.setPId(jsonObject.getLong("id"));
+        if(jsonObject.has("total_coin")&&!jsonObject.isNull("total_coin")){
+            order.setCoin(jsonObject.getLong("total_coin"));
+        }
 
         JSONObject customerObject = jsonObject.getJSONObject("customer");
         order.setName(customerObject.getString("name"));
@@ -33,7 +36,6 @@ public class OrderUtil {
         order.setDistrict(delivery.getJSONObject("receiver_district").getString("name"));
         order.setWard(delivery.getJSONObject("receiver_ward").getString("name"));
         order.setAddress(delivery.getString("receiver_address"));
-
         return order;
     }
 }
