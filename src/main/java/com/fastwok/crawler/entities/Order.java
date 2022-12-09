@@ -15,28 +15,26 @@ public class Order {
     private String code;
     private Integer customerId;
     private String phone;
-    private String coupon;
+    private String coupon="";
     private Long coin;
     private String address;
     private String city;
     private String district;
     private String ward;
+
     @Override
-    public String toString(){
+    public String toString() {
         return "{\n" +
-                "  \"id\": "+pId+",\n" +
-                "  \"depotId\":133563,\n" +
-                "  \"customerName\": \""+name+"\",\n" +
-                "  \"customerMobile\": \""+phone+"\",\n" +
-                "  \"couponCode\": \""+coupon+"\",\n" +
-                "  \"coin\": \""+coin+"\",\n" +
-                "  \"customerAddress\": \""+address+"\",\n" +
-                "  \"customerCityName\": \""+city+"\",\n" +
-                "  \"customerDistrictName\": \""+district+"\",\n" +
-                "  \"customerWardLocationName\": \""+ward+"\",\n" +
+                "  \"id\": " + pId + ",\n" +
+                "  \"depotId\":132462,\n" +
+                "  \"customerName\": \"" + name + "\",\n" +
+                "  \"customerMobile\": \"" + phone + "\",\n" +
+                "  \"customerAddress\": \"" + address + "\",\n" +
+                "  \"customerCityName\": \"" + city + "\",\n" +
+                "  \"couponCode\": \"" + coupon + "\",\n"+
+                "  \"usedPoints\": " + coin + ",\n" +
+                "  \"customerDistrictName\": \"" + district + "\",\n" +
                 "  \"privateDescription\":\"Đơn lên từ website\",\n" +
-                "  \"carrierId\":5,\n" +
-                "  \"carrierName\":\"Giaohangnhanh\",\n" +
-                "  \"productList\": [\n" ;
+                "  \"productList\": [\n";
     }
 }

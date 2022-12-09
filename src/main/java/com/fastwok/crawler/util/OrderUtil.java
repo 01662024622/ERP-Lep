@@ -17,9 +17,9 @@ public class OrderUtil {
         }
 
         JSONObject customerObject = jsonObject.getJSONObject("customer");
-        order.setName(customerObject.getString("name"));
+        order.setName(customerObject.getString("name").replaceAll("\t","").replaceAll("\n","").trim());
         order.setCustomerId(customerObject.getInt("id"));
-        order.setPhone(customerObject.getString("phone").replaceAll("\\s", ""));
+        order.setPhone(customerObject.getString("phone").replaceAll("\\s", "").replaceAll("\t","").replaceAll("\n","").trim());
         if (jsonObject.has("payments")){
             JSONArray payment = jsonObject.getJSONArray("payments");
             if (payment.length()>0){

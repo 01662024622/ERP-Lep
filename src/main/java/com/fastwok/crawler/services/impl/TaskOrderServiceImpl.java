@@ -40,8 +40,6 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     private final String N_API = "https://open.nhanh.vn/api/";
     private final String Login = "auth/login-password?group=web";
     private final String OrderURL = "orders";
-    private final String ACCDOC = "invoices";
-    private int CheckHour = -1;
 
 
     @Override
@@ -56,7 +54,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         }
 
 
-        importCustomer(9,true);
+        crawlOrder(1,true);
     }
 
 
@@ -156,8 +154,9 @@ public class TaskOrderServiceImpl implements TaskOrderService {
                 else {
                     String body = BodyRequest.getBodyGetProduct("{\"page\":1,\"name\":\""+element.getCode()+"\"}");
                     try {
-                        Long idN = getItemIdN("https://open.nhanh.vn/api/product/search",body,element.getCode());
+                        Long idN = getItemIdN(N_API+ "product/search",body,element.getCode());
                         element.setNId(idN);
+                        itemRepository.save(element);
                     } catch (UnirestException e) {
                         throw new RuntimeException(e);
                     }
@@ -173,11 +172,11 @@ public class TaskOrderServiceImpl implements TaskOrderService {
                 customerRepository.save(customer);
             }
             orderRepository.save(order);
-            itemRepository.saveAll(items);
             String bodyProducts = String.join(",",itemQuery);
-            String body =  BodyRequest.getBodyGetProduct(order +bodyProducts+"  ]\n" +
+            String orderContent = order.toString();
+            String body =  BodyRequest.getBodyGetProduct(orderContent +bodyProducts+"  ]\n" +
                     "}");
-            JSONObject jsonObject1 = ApiN("https://open.nhanh.vn/api/order/add",body);
+            JSONObject jsonObject1 = ApiN(N_API+"order/add",body);
             log.info(jsonObject1.toString());
         }
         if (count < page * 50) {
@@ -188,8 +187,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         crawlOrder(page + 1,true);
     }
 
-    private Token OAuth2(String url, String body)
-            throws UnirestException {
+    private Token OAuth2(String url, String body) throws UnirestException {
         Date date = new Date();
         long timeMilli = date.getTime();
         HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.post(url)
@@ -217,8 +215,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         tokenRepository.save(token);
         return token;
     }
-    private JSONObject ApiN(String url,String body)
-            throws UnirestException {
+    private JSONObject ApiN(String url,String body) throws UnirestException {
         Date date = new Date();
         long timeMilli = date.getTime();
         HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.post(url)
@@ -237,8 +234,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         JSONObject res = new JSONObject(jsonNodeHttpResponse.getBody());
         return res.getJSONObject("object");
     }
-    private Long getItemIdN(String url,String body,String code)
-            throws UnirestException {
+    private Long getItemIdN(String url,String body,String code) throws UnirestException {
         JSONObject jsonObject =ApiN(url,body);
         if (!jsonObject.has("data")) return 37864656L;
         jsonObject = jsonObject.getJSONObject("data");
@@ -265,8 +261,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         }
         return 37864656L;
     }
-    public static HttpResponse<JsonNode> Api(String url)
-            throws UnirestException {
+    public static HttpResponse<JsonNode> Api(String url) throws UnirestException {
         Date date = new Date();
         long timeMilli = date.getTime();
         return Unirest.get(url)
@@ -283,8 +278,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
                 .header("Sec-Fetch-Site", "same-site")
                 .asJson();
     }
-    private JSONObject Put(String url,String body)
-            throws UnirestException {
+    private JSONObject Put(String url,String body) throws UnirestException {
         Date date = new Date();
         long timeMilli = date.getTime();
         HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.put(url)
@@ -304,8 +298,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         JSONObject res = new JSONObject(jsonNodeHttpResponse.getBody());
         return res.getJSONObject("object");
     }
-    private JSONObject Post(String url,String body)
-            throws UnirestException {
+    private JSONObject Post(String url,String body) throws UnirestException {
         Date date = new Date();
         long timeMilli = date.getTime();
         HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.post(url)

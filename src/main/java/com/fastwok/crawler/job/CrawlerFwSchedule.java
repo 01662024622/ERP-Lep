@@ -15,7 +15,7 @@ public class CrawlerFwSchedule {
     @Autowired
     TaskOrderService taskOrderService;
 
-    @Scheduled(fixedDelay = 1143200000)
+    @Scheduled(fixedDelay = 10000)
     public void importData() throws UnirestException, InterruptedException {
         taskOrderService.getData();
     }
