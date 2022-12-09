@@ -25,15 +25,18 @@ public class Order {
     public String toString(){
         return "{\n" +
                 "  \"id\": "+pId+",\n" +
-                "  \"depotId\":132462,\n" +
+                "  \"depotId\":133563,\n" +
                 "  \"customerName\": \""+name+"\",\n" +
                 "  \"customerMobile\": \""+phone+"\",\n" +
-                "  \"customerAddress\": \""+address+"\",\n" +
-                "  \"customerCityName\": \""+city+"\",\n" +
                 "  \"couponCode\": \""+coupon+"\",\n" +
                 "  \"coin\": \""+coin+"\",\n" +
+                "  \"customerAddress\": \""+address+"\",\n" +
+                "  \"customerCityName\": \""+city+"\",\n" +
                 "  \"customerDistrictName\": \""+district+"\",\n" +
+                "  \"customerWardLocationName\": \""+ward+"\",\n" +
                 "  \"privateDescription\":\"Đơn lên từ website\",\n" +
+                "  \"carrierId\":5,\n" +
+                "  \"carrierName\":\"Giaohangnhanh\",\n" +
                 "  \"productList\": [\n" ;
     }
 }
