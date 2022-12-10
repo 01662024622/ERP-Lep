@@ -102,13 +102,13 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         }
 
         if (820 < page * 10) {
-            log.info("done----------------------");
+//            log.info("done----------------------");
             return;
         }else {
             if(page%500==0){
                 Thread.sleep(50000);
             }
-            log.info("page------"+page+"----------------------");
+//            log.info("page------"+page+"----------------------");
         }
         Thread.sleep(5000);
         importCustomer(page + 1,true);
@@ -177,10 +177,10 @@ public class TaskOrderServiceImpl implements TaskOrderService {
             String body =  BodyRequest.getBodyGetProduct(orderContent +bodyProducts+"  ]\n" +
                     "}");
             JSONObject jsonObject1 = ApiN(N_API+"order/add",body);
-            log.info(jsonObject1.toString());
+//            log.info(jsonObject1.toString());
         }
         if (count < page * 50) {
-            log.info("done----------------------");
+//            log.info("done----------------------");
             return;
         }
         Thread.sleep(10000);

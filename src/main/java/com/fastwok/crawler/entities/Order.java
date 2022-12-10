@@ -23,6 +23,8 @@ public class Order {
     private String address;
     private String city;
     private String district;
+    private Long total_shipping_fee;
+    private Long total_unpaid;
     private String ward;
     @Override
     public String toString(){
@@ -42,8 +44,7 @@ public class Order {
                 "  \"customerWardLocationName\": \""+ward+"\",\n" +
                 "  \"createdDateTime\": \""+today+"\",\n" +
                 "  \"privateDescription\":\"Đơn lên từ website\",\n" +
-                "  \"carrierId\":5,\n" +
-                "  \"carrierName\":\"Giaohangnhanh\",\n" +
+                "  \"customerShipFee\":"+total_shipping_fee+",\n" +
                 "  \"productList\": [\n" ;
     }
 }
