@@ -44,7 +44,7 @@ public class ProductUtil {
             item.setOrderId(orderId);
             item.setPrice(itemObject.getLong("price"));
             item.setQuantity(itemObject.getLong("total_quantity"));
-            item.setPId(itemObject.getLong("id"));
+            item.setPId(itemObject.getLong("option_id"));
             item.setCode(itemObject.getString("sku"));
             item.setName(itemObject.getString("name"));
             item.setOrderId(orderId);

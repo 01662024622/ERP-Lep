@@ -67,7 +67,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
         String today = dateFormat.format(date.getTime());
 
-        date.add(Calendar.HOUR, -1);
+        date.add(Calendar.HOUR, -24);
         String yesterday = dateFormat.format(date.getTime());
 
         String paramOrder = "?limit=50&skip=" + (page * 50 - 50) + "&types=order&sources=web,app&stock_id=31&order_by=desc&sort_by=id&statuses=draft&min_created_at=" + yesterday + "&max_created_at=" + today;
