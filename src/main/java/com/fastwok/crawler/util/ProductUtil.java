@@ -22,7 +22,7 @@ public class ProductUtil {
 
                 products.addAll(convert(productObject.getJSONArray("products"),product.getPId()));
             }catch (Exception e){
-                log.info(productObject.toString());
+//                log.info(productObject.toString());
             }
         }
         return products;

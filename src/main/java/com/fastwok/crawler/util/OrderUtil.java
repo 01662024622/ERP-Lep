@@ -15,11 +15,17 @@ public class OrderUtil {
         if(jsonObject.has("total_coin")&&!jsonObject.isNull("total_coin")){
             order.setCoin(jsonObject.getLong("total_coin"));
         }
+        if(jsonObject.has("total_shipping_fee")&&!jsonObject.isNull("total_shipping_fee")){
+            order.setTotal_shipping_fee(jsonObject.getLong("total_shipping_fee"));
+        }
+        if(jsonObject.has("total_unpaid")&&!jsonObject.isNull("total_unpaid")){
+            order.setTotal_unpaid(jsonObject.getLong("total_unpaid"));
+        }
 
         JSONObject customerObject = jsonObject.getJSONObject("customer");
-        order.setName(customerObject.getString("name"));
+        order.setName(customerObject.getString("name").replaceAll("\t","").replaceAll("\n","").trim());
         order.setCustomerId(customerObject.getInt("id"));
-        order.setPhone(customerObject.getString("phone").replaceAll("\\s", ""));
+        order.setPhone(customerObject.getString("phone").replaceAll("\\s", "").replaceAll("\t","").replaceAll("\n","").trim());
         if (jsonObject.has("payments")){
             JSONArray payment = jsonObject.getJSONArray("payments");
             if (payment.length()>0){

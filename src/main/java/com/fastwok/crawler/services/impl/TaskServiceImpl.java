@@ -71,7 +71,6 @@ public class TaskServiceImpl implements TaskService {
 
 
     public void crawlProduct(String today1, int page) throws UnirestException, InterruptedException {
-        log.info(page+"---------------");
         String paramCustomer = "?limit=500&skip=" + (page * 500 - 500) + "&types=item&stock_id=31&order_by=desc&sort_by=id";
         HttpResponse<JsonNode> authen = Api(URL_API + SKU + paramCustomer);
         JSONObject res = new JSONObject(authen.getBody());
@@ -80,7 +79,7 @@ public class TaskServiceImpl implements TaskService {
         int count = jsonObject.getInt("count");
         List<Product> products = ProductUtil.convert(jsonObject.getJSONArray("data"),0);
         productRepository.saveAll(products);
-        if (count<page*500) {log.info("done----------------------");return;}
+        if (count<page*500) return;
         crawlProduct("",page+1);
 
     }
