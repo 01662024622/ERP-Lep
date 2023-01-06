@@ -47,7 +47,7 @@ public class TaskPushItemPancakeServiceImpl implements TaskPushItemPancakeServic
         List<PancakeItemMap> pancakeItemMaps = pancakeItemMapRepository.getByPage(20,page*20);
         pancakeItemMaps.forEach(ele->{
             try {
-                HttpResponse<String> string1 =POST(ele);
+                POST(ele);
                 ele.setPush(1);
             } catch (UnirestException e) {
                 throw new RuntimeException(e);
@@ -61,7 +61,7 @@ public class TaskPushItemPancakeServiceImpl implements TaskPushItemPancakeServic
         pushItem(page + 1);
 
     }
-    public HttpResponse<String> POST(PancakeItemMap pancakeItemMap) throws UnirestException {
+    public void POST(PancakeItemMap pancakeItemMap) throws UnirestException {
         Date date = new Date();
         long timeMilli = date.getTime();
         String size = pancakeItemMap.getCode().substring(pancakeItemMap.getCode().length() - 1);
@@ -90,6 +90,6 @@ public class TaskPushItemPancakeServiceImpl implements TaskPushItemPancakeServic
                 .field("params[is_kiotviet]", "false")
                 .field("params[is_auto_gen]", "true")
                 .field("params[is_custom_gen]", "false");
-        return body.asString();
+        body.asString();
     }
 }
