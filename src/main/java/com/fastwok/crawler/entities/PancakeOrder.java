@@ -38,7 +38,7 @@ public class PancakeOrder {
                 "  \"customerDistrictName\": \"" + district + "\",\n" +
                 "  \"customerWardLocationName\": \"" + ward + "\",\n" +
                 "  \"createdDateTime\": \"" + today + "\",\n" +
-                "  \"privateDescription\":\"Đơn lên từ website\",\n" +
+                "  \"privateDescription\":\"Đơn lên từ pancake\",\n" +
                 "  \"customerShipFee\":" + total_shipping_fee + ",\n" +
                 "  \"moneyDiscount\":" + money_discount + ",\n" +
                 "  \"productList\": [\n";

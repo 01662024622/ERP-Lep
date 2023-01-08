@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface PancakeShopRepository extends JpaRepository<PancakeShop, Integer> {
-    @Query(nativeQuery = true, value = "SELECT * FROM PancakeShop p WHERE p.active=true LIMIT 1")
+    @Query(nativeQuery = true, value = "SELECT * FROM pancake_shop p WHERE p.active=1 LIMIT 1")
     List<PancakeShop> getPancakeShopByActive();
 }
 

@@ -21,7 +21,7 @@ public class PancakeItem {
     @Override
     public String toString() {
         return "{\n" +
-                "      \"id\": " + pId + ",\n" +
+                "      \"id\": \"" + pId + "\",\n" +
                 "      \"idNhanh\": " + nId + ",\n" +
                 "      \"quantity\": " + quantity + ",\n" +
                 "      \"name\":\"" + name + "\",\n" +

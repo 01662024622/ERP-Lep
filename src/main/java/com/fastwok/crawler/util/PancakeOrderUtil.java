@@ -13,7 +13,7 @@ public class PancakeOrderUtil {
             order.setTotal_shipping_fee(jsonObject.getLong("partner_fee"));
         }
         if(jsonObject.has("discount")&&!jsonObject.isNull("discount")){
-            order.setTotal_shipping_fee(jsonObject.getLong("discount"));
+            order.setMoney_discount(jsonObject.getLong("discount"));
         }
 
         JSONObject customerObject = jsonObject.getJSONObject("shipping_address");
