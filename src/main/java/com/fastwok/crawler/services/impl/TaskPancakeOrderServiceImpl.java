@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 
 @Service
@@ -34,11 +35,7 @@ public class TaskPancakeOrderServiceImpl implements TaskPancakeOrderService {
     @Autowired
     CustomerRepository customerRepository;
     static PancakeToken TokenCode = null;
-    private List<PancakeShop> Shops = null;
-    private final String P_API = "https://pos.pages.fm/api/v1/shops/";
     private final String N_API = "https://open.nhanh.vn/api/";
-    private final String OrderURL = "orders";
-    private final String Accesstoken = "orders";
 
 
     @Override
@@ -49,32 +46,23 @@ public class TaskPancakeOrderServiceImpl implements TaskPancakeOrderService {
                 return;
             }
         }
-        if (Shops == null) {
-            Shops = pancakeShopRepository.getPancakeShopByActive();
-            if (Shops == null||Shops.isEmpty()) {
-                return;
-            }
-        }
-
 
         crawlOrders(1, true);
     }
 
     public void crawlOrders(int page, boolean checkLogin) throws UnirestException, InterruptedException {
         Date date = new Date();
-        long from = date.getTime()/10000-3600;
-        long to =from+7200;
-        for (int i = 0; i < Shops.size(); i++) {
-            String getOrderUrl="https://pos.pages.fm/api/v1/shops/268808/orders?" +
-                    "access_token=" +TokenCode.getToken()+
-                    "&page_size=100&status=1&updateStatus=inserted_at&editorId=none&option_sort=inserted_at_desc&es_only=true&page=";
-            crawlOrder(1,getOrderUrl);
-        }
-
+        long from = date.getTime() / 10000 - 3600;
+        long to = from + 7200;
+        String getOrderUrl = "https://pos.pages.fm/api/v1/shops/268808/orders?" +
+                "access_token=" + TokenCode.getToken() +
+                "&page_size=100&status=1&updateStatus=inserted_at&editorId=none&option_sort=inserted_at_desc&es_only=true&page=";
+        crawlOrder(1, getOrderUrl);
     }
-    private void crawlOrder(int page,String body) throws UnirestException, InterruptedException{
 
-        HttpResponse<JsonNode> orders = ApiUtil.GET(body+page);
+    private void crawlOrder(int page, String body) throws UnirestException, InterruptedException {
+
+        HttpResponse<JsonNode> orders = ApiUtil.GET(body + page);
         JSONObject res = new JSONObject(orders.getBody());
         JSONObject jsonObject = res.getJSONObject("object");
         if (!jsonObject.has("data")) return;
@@ -91,28 +79,24 @@ public class TaskPancakeOrderServiceImpl implements TaskPancakeOrderService {
 //            convert list item
             JSONArray itemsJsonArray = orderObject.getJSONArray("items");
 //            check order have item
-            if (itemsJsonArray.length()==0) {
+            if (itemsJsonArray.length() == 0) {
                 pancakeOrderRepository.save(order);
                 continue;
             }
 
             List<PancakeItem> items = PancakeItemUtil.convertItem(itemsJsonArray, order.getPId());
             List<String> itemQuery = new ArrayList<>();
-            for (int x=0;x<items.size();x++){
-                PancakeInventory itemPancake = pancakeInventoryRepository.findFirstByPId(items.get(x).getPId());
-                if (itemPancake != null) items.get(x).setNId(itemPancake.getNId());
-                else {
-                    PancakeItemMap pancakeItemMap = pancakeItemMapRepository.findFirstByPCode(items.get(x).getCode());
-                    if (pancakeItemMap == null||pancakeItemMap.getInventory()<items.get(x).getQuantity()) {
-                        itemQuery=new ArrayList<>();
-                        break;
-                    }else {
-                        items.get(x).setNId(pancakeItemMap.getN_id());
-                    }
+            for (int x = 0; x < items.size(); x++) {
+                PancakeItemMap pancakeItemMap = pancakeItemMapRepository.findFirstByPCode(items.get(x).getCode());
+                if (pancakeItemMap == null || pancakeItemMap.getInventory() < items.get(x).getQuantity()) {
+                    itemQuery = new ArrayList<>();
+                    break;
+                } else {
+                    items.get(x).setNId(pancakeItemMap.getN_id());
                 }
                 itemQuery.add(items.get(x).toString());
             }
-            if(itemQuery.size()==0) continue;
+            if (itemQuery.size() == 0) continue;
 
             pancakeOrderRepository.save(order);
             pancakeItemRepository.saveAll(items);
@@ -121,11 +105,11 @@ public class TaskPancakeOrderServiceImpl implements TaskPancakeOrderService {
             String bodyCreateOrder = BodyRequest.getBodyGetProduct(orderContent + bodyProducts + "  ]\n" +
                     "}");
             ApiN(N_API + "order/add", bodyCreateOrder);
-            String putOrderUrl="https://pos.pages.fm/api/v1/shops/268808/orders/" +orderObject.getLong("id")+
-                    "?access_token=" +TokenCode.getToken();
+            String putOrderUrl = "https://pos.pages.fm/api/v1/shops/268808/orders/" + orderObject.getLong("id") +
+                    "?access_token=" + TokenCode.getToken();
             orderObject.remove("status");
-            orderObject.put("status",3);
-            ApiUtil.PUT(putOrderUrl,"{\"order\":"+orderObject+"}");
+            orderObject.put("status", 3);
+            ApiUtil.PUT(putOrderUrl, "{\"order\":" + orderObject + "}");
         }
         if (page_number <= page) {
             log.info("done");
