@@ -85,6 +85,7 @@ public class TaskPancakeOrderServiceImpl implements TaskPancakeOrderService {
             }
 
             List<PancakeItem> items = PancakeItemUtil.convertItem(itemsJsonArray, order.getPId());
+            List<PancakeItemMap> pancakeItemMaps = new ArrayList<>();
             List<String> itemQuery = new ArrayList<>();
             for (int x = 0; x < items.size(); x++) {
                 PancakeItemMap pancakeItemMap = pancakeItemMapRepository.findFirstByPCode(items.get(x).getCode());
@@ -93,13 +94,16 @@ public class TaskPancakeOrderServiceImpl implements TaskPancakeOrderService {
                     break;
                 } else {
                     items.get(x).setNId(pancakeItemMap.getN_id());
+                    pancakeItemMap.setInventory(pancakeItemMap.getInventory() - items.get(x).getQuantity());
+                    pancakeItemMaps.add(pancakeItemMap);
+                    itemQuery.add(items.get(x).toString());
                 }
-                itemQuery.add(items.get(x).toString());
             }
             if (itemQuery.size() == 0) continue;
 
             pancakeOrderRepository.save(order);
             pancakeItemRepository.saveAll(items);
+            pancakeItemMapRepository.saveAll(pancakeItemMaps);
             String bodyProducts = String.join(",", itemQuery);
             String orderContent = order.toString();
             String bodyCreateOrder = BodyRequest.getBodyGetProduct(orderContent + bodyProducts + "  ]\n" +
