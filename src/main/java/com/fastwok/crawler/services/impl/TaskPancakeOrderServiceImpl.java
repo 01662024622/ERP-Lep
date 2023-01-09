@@ -116,7 +116,6 @@ public class TaskPancakeOrderServiceImpl implements TaskPancakeOrderService {
             ApiUtil.PUT(putOrderUrl, "{\"order\":" + orderObject + "}");
         }
         if (page_number <= page) {
-            log.info("done");
             return;
         }
         Thread.sleep(10000);
