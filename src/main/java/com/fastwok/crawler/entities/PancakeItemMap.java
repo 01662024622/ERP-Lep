@@ -17,6 +17,6 @@ public class PancakeItemMap {
     private String name;
     private Long inventory;
     private Long price;
-    private Long p_id;
+    private String p_id;
     private Integer push;
 }
