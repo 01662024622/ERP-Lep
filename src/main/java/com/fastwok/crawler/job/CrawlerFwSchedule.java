@@ -1,6 +1,7 @@
 package com.fastwok.crawler.job;
 
 import com.fastwok.crawler.services.impl.TaskPancakeOrderServiceImpl;
+import com.fastwok.crawler.services.impl.TaskPushItemPancakeServiceImpl;
 import com.fastwok.crawler.services.isservice.TaskOrderService;
 import com.fastwok.crawler.services.isservice.TaskPancakeOrderService;
 import com.fastwok.crawler.services.isservice.TaskPushItemPancakeService;
@@ -15,10 +16,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class CrawlerFwSchedule {
     @Autowired
-    TaskPancakeOrderServiceImpl taskPancakeOrderService;
+    TaskPushItemPancakeServiceImpl taskPushItemPancakeService;
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 1000000000)
     public void importData2() throws UnirestException, InterruptedException {
-        taskPancakeOrderService.getData();
+        taskPushItemPancakeService.getData();
     }
 }

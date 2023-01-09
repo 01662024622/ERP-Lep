@@ -13,6 +13,6 @@ public interface PancakeItemMapRepository extends JpaRepository<PancakeItemMap, 
     @Query(nativeQuery = true, value = "SELECT * FROM pancake_item_map WHERE code=?1 LIMIT 1")
     PancakeItemMap findFirstByPCode(String code);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM pancake_item_map WHERE push = 0 LIMIT ?1 OFFSET ?2")
+    @Query(nativeQuery = true, value = "SELECT * FROM pancake_item_map WHERE push = 0 ORDER BY id DESC LIMIT ?1 OFFSET ?2")
     List<PancakeItemMap> getByPage(int limit,int offset);
 }

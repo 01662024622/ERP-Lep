@@ -55,6 +55,7 @@ public class TaskPushItemPancakeServiceImpl implements TaskPushItemPancakeServic
         });
         pancakeItemMapRepository.saveAll(pancakeItemMaps);
         if (pancakeItemMaps.size() < 20) {
+            log.info("done");
             return;
         }
         Thread.sleep(5000);
