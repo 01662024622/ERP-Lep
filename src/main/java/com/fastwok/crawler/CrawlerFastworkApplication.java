@@ -20,15 +20,8 @@ import java.util.Date;
 @Slf4j
 @EnableScheduling
 public class CrawlerFastworkApplication
-//        implements CommandLineRunner {
     {
     public static void main(String[] args) {
         SpringApplication.run(CrawlerFastworkApplication.class, args);
     }
-//    @Autowired
-//    CrawlerFwSchedule crawlerFwSchedule;
-//    @Override
-//    public void run(String... args) throws Exception {
-//        crawlerFwSchedule.importData();
-//    }
 }
