@@ -44,7 +44,7 @@ public class TaskPushItemPancakeServiceImpl implements TaskPushItemPancakeServic
         pushItem(0);
     }
     public void pushItem(int page) throws UnirestException, InterruptedException {
-        List<PancakeItemMap> pancakeItemMaps = pancakeItemMapRepository.getByPage(20,page*20);
+        List<PancakeItemMap> pancakeItemMaps = pancakeItemMapRepository.getByPage(20,0);
         pancakeItemMaps.forEach(ele->{
             try {
                 POST(ele);
@@ -58,6 +58,7 @@ public class TaskPushItemPancakeServiceImpl implements TaskPushItemPancakeServic
             log.info("done");
             return;
         }
+        log.info("page----"+page);
         Thread.sleep(5000);
         pushItem(page + 1);
 
