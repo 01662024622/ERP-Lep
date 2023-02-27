@@ -10,7 +10,7 @@ public class PancakeStaff {
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String p_id;
+    private Long p_id;
     private Long n_id;
     private String username;
     private String fullname;

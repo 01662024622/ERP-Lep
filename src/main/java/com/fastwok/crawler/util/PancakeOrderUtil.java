@@ -22,7 +22,7 @@ public class PancakeOrderUtil {
         if (jsonObject.has("creator") && !jsonObject.isNull("creator")) {
             if (jsonObject.getJSONObject("creator").has("fb_id") && !jsonObject.getJSONObject("creator").isNull("fb_id")) {
                 if (jsonObject.getJSONObject("creator").getLong("fb_id") > 0) {
-                    PancakeStaff pancakeStaff = pancakeStaffRepository.getPancakeStaffByNId(jsonObject.getJSONObject("creator").getString("fb_id"));
+                    PancakeStaff pancakeStaff = pancakeStaffRepository.getPancakeStaffByNId(jsonObject.getJSONObject("creator").getLong("fb_id"));
                     if (pancakeStaff != null && pancakeStaff.getN_id() != null) {
                         order.setCreator_id(pancakeStaff.getN_id());
                     }
