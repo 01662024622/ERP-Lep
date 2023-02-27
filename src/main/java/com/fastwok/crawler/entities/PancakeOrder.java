@@ -22,12 +22,17 @@ public class PancakeOrder {
     private String district;
     private Long total_shipping_fee;
     private Long money_discount;
+    private Long creator_id;
 
     @Override
     public String toString() {
         Calendar date = Calendar.getInstance();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         String today = dateFormat.format(date.getTime());
+        String staff = "";
+        if(creator_id!=null&&creator_id>0){
+            staff = "\"saleId\":"+creator_id+",";
+        }
         return "{\n" +
                 "  \"id\": " + pId + ",\n" +
                 "  \"depotId\":133563,\n" +
@@ -40,7 +45,8 @@ public class PancakeOrder {
                 "  \"createdDateTime\": \"" + today + "\",\n" +
                 "  \"privateDescription\":\"Đơn lên từ pancake\",\n" +
                 "  \"customerShipFee\":" + total_shipping_fee + ",\n" +
-                "  \"moneyDiscount\":" + money_discount + ",\n" +
+                "  \"moneyDiscount\":" + money_discount + ",\n"
+                +staff+
                 "  \"productList\": [\n";
     }
 }

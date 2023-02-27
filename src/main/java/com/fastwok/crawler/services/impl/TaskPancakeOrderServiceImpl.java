@@ -34,6 +34,8 @@ public class TaskPancakeOrderServiceImpl implements TaskPancakeOrderService {
     PancakeItemMapRepository pancakeItemMapRepository;
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    PancakeStaffRepository pancakeStaffRepository;
     static PancakeToken TokenCode = null;
     private final String N_API = "https://open.nhanh.vn/api/";
 
@@ -75,7 +77,7 @@ public class TaskPancakeOrderServiceImpl implements TaskPancakeOrderService {
             long number = pancakeOrderRepository.countByPId(orderObject.getLong("id"));
             if (number > 0) return;
 //            convert order
-            PancakeOrder order = PancakeOrderUtil.convert(orderObject);
+            PancakeOrder order = PancakeOrderUtil.convert(orderObject,pancakeStaffRepository);
 //            convert list item
             JSONArray itemsJsonArray = orderObject.getJSONArray("items");
 //            check order have item

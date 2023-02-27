@@ -4,6 +4,7 @@ import com.fastwok.crawler.entities.PancakeItemMap;
 import com.fastwok.crawler.entities.PancakeShop;
 import com.fastwok.crawler.entities.PancakeToken;
 import com.fastwok.crawler.repository.PancakeItemMapRepository;
+import com.fastwok.crawler.repository.PancakeStaffRepository;
 import com.fastwok.crawler.repository.PancakeTokenRepository;
 import com.fastwok.crawler.services.isservice.TaskPushItemPancakeService;
 import com.mashape.unirest.http.HttpResponse;
