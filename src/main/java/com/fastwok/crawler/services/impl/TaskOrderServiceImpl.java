@@ -120,7 +120,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
         String today = dateFormat.format(date.getTime());
 
-        date.add(Calendar.HOUR, -24);
+        date.add(Calendar.HOUR, -240);
         String yesterday = dateFormat.format(date.getTime());
 
         String paramOrder = "?limit=50&skip=" + (page * 50 - 50) + "&types=order&sources=web,app&stock_id=31&order_by=desc&sort_by=id&statuses=draft&min_created_at=" + yesterday + "&max_created_at=" + today;
@@ -139,7 +139,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject orderObject = jsonArray.getJSONObject(i);
             long number = orderRepository.countByPId(orderObject.getLong("id"));
-            if (number > 0) return;
+            if (number > 0) continue;
             HttpResponse<JsonNode> detail = TaskOrderServiceImpl.Api("https://api.lep.vn/v1/orders/" + orderObject.getLong("id"));
             JSONObject resDetail = new JSONObject(detail.getBody());
             resDetail = resDetail.getJSONObject("object");

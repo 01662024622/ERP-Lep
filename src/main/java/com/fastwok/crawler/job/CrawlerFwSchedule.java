@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class CrawlerFwSchedule {
     @Autowired
-    TaskPancakeOrderService taskPancakeOrderService;
+    TaskOrderService taskOrderService;
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 20000)
     public void importData2() throws UnirestException, InterruptedException {
-        taskPancakeOrderService.getData();
+        taskOrderService.getData();
     }
 }
